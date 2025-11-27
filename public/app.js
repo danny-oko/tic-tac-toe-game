@@ -14,7 +14,7 @@ const winConditions = [
   [0, 3, 6],
   [1, 4, 7],
   [2, 5, 8],
-  // diagnal
+  // diagonal
   [0, 4, 8],
   [2, 4, 6],
 ];
@@ -22,9 +22,6 @@ const winConditions = [
 // player turns
 let turn0 = true;
 let turn1 = false;
-
-// let firstPlayerData = [0, 0, 0, 0, 0];
-// let secondPlayerData = [0, 0, 0, 0];
 
 boxes.forEach((box) => {
   box.addEventListener("click", function () {
@@ -39,11 +36,15 @@ boxes.forEach((box) => {
       box.textContent = "o";
       turn0 = true;
       box.style.pointerEvents = "none";
+      box.style.cursor = "not-allowed";
+      disableGameAction();
     }
   });
   reset.addEventListener("click", function () {
     box.style.backgroundColor = "";
     box.textContent = "";
+
+    gameActive = true;
   });
 });
 
@@ -52,8 +53,32 @@ function checkWin() {
   for (condition of winConditions) {
     winnerFound = true;
     msg.style.display = "block";
-    
+    const val1 = boxes[a].textContent;
+    const val2 = boxes[b].textContent;
+    const val3 = boxex[c].textContent;
+
+    if (val1 === "" || val2 === "" || val3 === "") continue;
+
+    if ((val1 === val2) === val3) {
+      winnerFound = true;
+      msg.textContent = `Player ${val1} Wins!`;
+      msg.style.color = val1 = "X" ? "red" : "blue";
+
+      // highlight the winning line
+      boxes[a].style.backgroundColor = "#a1bc98";
+      boxes[b].style.backgroundColor = "#a1bc98";
+      boxes[c].style.backgroundColor = "#a1bc98";
+
+      gameActive = false;
+      enableNewGameButton();
+      disableGameAction();
+      return;
+    }
   }
+}
+
+function disableGameAction() {
+  box.style.pointerEvents = "none";
 }
 // 1. how to integrate the win conditions with the box elements
 // 2. how to check the win conditions after each players actions
